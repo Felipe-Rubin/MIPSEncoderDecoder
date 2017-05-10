@@ -4,13 +4,13 @@
 
 main:
 	
-	xori $t0, $t1,100
+	xori $t0, 	$t1,100
 	
-	lui $t3, 32
+	lui 	$t3, 32
 	
-	addu $t5, $s1, $t3
+	addu $t5, 		$s1, $t3
 	
-	addiu $t4, $t5, 8
+	addiu $t4,  $t5, 8
 Ex1:	
 	addiu $t4, $t5, -4
 	
