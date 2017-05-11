@@ -6,9 +6,9 @@ import java.util.*;
 import java.io.*;
 import java.nio.*;
 public class Parser{
-	private String file;
-	private String currentMemory;
-	private String currentMemoryData;
+	private String file; //Arquivo a ser lido
+	private String currentMemory; //Contador indica a PosMemTexto atual
+	private String currentMemoryData; //Contador indica a PosMemDados atual
 	private Map<String,String> dataMemory; //<PosMemoria,Dado>
 	private Map<String,String> textMemory; //<PosMemoria,Instr>
 	private Map<String,String> labelMemory; //<Label,PosMemoria>
@@ -21,6 +21,9 @@ public class Parser{
 		labelMemory = new LinkedHashMap<>();
 	}
 
+/*
+		Le o arquivo .asm
+*/
 	public void parseASM(){
 		try{
 			
