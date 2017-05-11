@@ -1,10 +1,11 @@
+#ddd
 .text
 
 .globl main
-
+#coment ddas
 main:
-	
-	xori $t0, 	$t1,100
+
+	xori $t0, 	$t1,100 #coment  
 	
 	lui 	$t3, 32
 	
@@ -15,17 +16,15 @@ Ex1:
 	addiu $t4, $t5, -4
 	
 	subu $t3, $t5, $1
-	
+
 	beq $t2, $t3, Ex1
 	
 	bne $t4, $v0, Ex2
 	sltiu $t4, $t5, -32
 	sltiu $t6, $s1, 32
-	
-			
-Ex2:
-	andi $t5, $t2, 1
-	
+				
+Ex2: andi $t5, $t2, 1
+
 	lw $t0, 0 ($t0)
 	sw $t3, 0 ($t0)
 	or $t2, $t5, $t1

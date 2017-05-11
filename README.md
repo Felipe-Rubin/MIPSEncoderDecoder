@@ -1,7 +1,11 @@
 # MIPSEncoderDecoder
 Encodes and Decodes some MIPS instructions
 
+ARRUMAR:
 
+- As labels, se tiver uma label depois da na mesma
+
+- Ver se precisa ler as informacoes do .data
 
 xori
 
