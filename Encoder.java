@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Encoder{
-	
+	 
 	public Encoder(){
 
 	}
