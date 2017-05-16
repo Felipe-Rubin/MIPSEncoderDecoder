@@ -3,6 +3,7 @@
 
 .globl main
 #coment ddas
+#.dasggasagsags
 main:
 
 	xori $t0, 	$t1,100 #coment  

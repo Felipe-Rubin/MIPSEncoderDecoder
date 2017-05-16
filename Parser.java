@@ -12,6 +12,7 @@ public class Parser{
 	private Map<String,String> dataMemory; //<PosMemoria,Dado>
 	private Map<String,String> textMemory; //<PosMemoria,Instr>
 	private Map<String,String> labelMemory; //<Label,PosMemoria>
+
 	public Parser(String file){
 		this.file = file;
 		currentMemory = "0x00400000";
@@ -97,7 +98,53 @@ public class Parser{
 			System.out.print("["+ks.getKey()+ "] ");
 			System.out.println(ks.getValue());
 		}
+
+		Encoder encoder = new Encoder();
+
+		try{
+
+			for(Map.Entry<String,String> ks : textMemory.entrySet()){
+				System.out.println(encoder.encode(labelMemory,ks.getKey(),ks.getValue()));
+			}
+
+		}catch(Exception e){
+			System.out.println("Error while Encoding");
+			System.out.println(e.getMessage());
+		}
 	}
+
+	/*
+		Le o arquivo p/ decodificara as instrucoes
+	*/
+	public void parseCode(){
+		try{
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String line =  "";
+			while((line = br.readLine()) != null){
+
+				if(line.matches("[\\s]*")) continue; //Se n tiver nada so pula
+				
+				if(!line.contains("0x")){  //Para o caso de testar valores direto do mars, n sai com 0x..
+					textMemory.put(currentMemory,"0x"+line);
+				}else{
+					textMemory.put(currentMemory,line);
+				}
+
+				currentMemory = Calculator.addIntToHex(4,currentMemory);
+			}
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+
+		for(Map.Entry<String,String> ks : textMemory.entrySet()){
+			System.out.print("["+ks.getKey()+ "] ");
+			System.out.println(ks.getValue());
+
+		}
+
+	}
+
+
 	/*
 		Recebe uma instrucao ma formatada(muitos tabs, espacos...)
 		Retorna ela formatada
