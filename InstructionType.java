@@ -5,7 +5,6 @@ public enum InstructionType{
 	I,
 	R,
 	SHIFT,
-
 	LUI;
 
 }

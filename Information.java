@@ -1,61 +1,150 @@
 import java.util.*;
 public class Information{
-	private Map<String,InstructionType> instructions;
-	private Map<String,String> op;
+	private Map<String,InstructionType> instructions; //tipo das instrucoes
+	private Map<String,String> op; //op code das instrucoes <Nome,OP>
 	private Map<String,String> func; //Soh p/ quem tem op = 0
+	private Map<String,InstructionType> opType; //tipo das instrucoes pelo opcode
+	private Map<String,InstructionType> funcType; //tipo das instrucoes pelo func code
+
+	private Map<String,String> opName; // <OPbinario,Nome>
+	private Map<String,String> funcName; //<FuncBinario,Nome>
 	public Information(){
 
 		instructions = new HashMap<>();
 		op = new HashMap<>();
 		func = new HashMap<>();
+		opType = new HashMap<>();
+		funcType = new HashMap<>();
+		opName = new HashMap<>();
+		funcName = new HashMap<>();
+
 
 		instructions.put("j",InstructionType.J);
 		op.put("j","2");
+		opType.put("000010",InstructionType.J);
+		opName.put("000010","j");
+
 		instructions.put("beq",InstructionType.BRANCH);
 		op.put("beq","4");
+		opType.put("000100",InstructionType.BRANCH);
+		opName.put("000100","beq");
+
 		instructions.put("bne",InstructionType.BRANCH);
 		op.put("bne","5");
+		opType.put("000101",InstructionType.BRANCH);
+		opName.put("000101","bne");		
+
 		instructions.put("lw",InstructionType.LOADSTORE);
 		op.put("lw","0x23");
+		opType.put("100011",InstructionType.LOADSTORE);
+		opName.put("100011","lw");				
+
 		instructions.put("sw",InstructionType.LOADSTORE);
 		op.put("sw","0x2b");
+		opType.put("101011",InstructionType.LOADSTORE);
+		opName.put("101011","sw");	
 
 		instructions.put("xori",InstructionType.I);
-		op.put("xori","0xe");		
-		instructions.put("addiu",InstructionType.I);	
-		op.put("addiu","9");	
+		op.put("xori","0xe");
+		opType.put("001110",InstructionType.I);
+		opName.put("001110","xori");	
+
+		instructions.put("addiu",InstructionType.I);
+		op.put("addiu","9");
+		opType.put("001001",InstructionType.I);
+		opName.put("001001","addiu");	
+
 		instructions.put("sltiu",InstructionType.I);
 		op.put("sltiu","0xb");		
+		opType.put("001011",InstructionType.I);
+		opName.put("001011","sltiu");	
+
 		instructions.put("andi",InstructionType.I);
 		op.put("andi","0xc");
+		opType.put("001100",InstructionType.I);
+		opName.put("001100","andi");	
 
 		instructions.put("addu",InstructionType.R);
 		op.put("addu","0");
 		func.put("addu","0x21");
+		funcType.put("100001",InstructionType.R);	
+		funcName.put("100001","addu");
+
 		instructions.put("subu",InstructionType.R);
 		op.put("subu","0");
 		func.put("subu","0x23");
+		funcType.put("100011",InstructionType.R);
+		funcName.put("100011","subu");
+
 		instructions.put("or",InstructionType.R);
 		op.put("or","0");
 		func.put("or","0x25");
+		funcType.put("100101",InstructionType.R);
+		funcName.put("100101","or");
+
 		instructions.put("slt",InstructionType.R);
 		op.put("slt","0");
 		func.put("slt","0x2a");
+		funcType.put("101010",InstructionType.R);
+		funcName.put("101010","slt");
+
+
+		opType.put("000000",InstructionType.R);
+
 
 		instructions.put("sll",InstructionType.SHIFT);
 		op.put("sll","0");
 		func.put("sll","0");
+		funcType.put("000000",InstructionType.SHIFT);
+		funcName.put("000000","sll");
+
+
 		instructions.put("srl",InstructionType.SHIFT);
 		op.put("srl","0");
 		func.put("srl","2");
+		funcType.put("000010",InstructionType.SHIFT);
+		funcName.put("000010","srl");
+
 
 		instructions.put("lui",InstructionType.LUI);
 		op.put("lui","0xf");
+		opType.put("001111",InstructionType.LUI);
+		opName.put("001111","lui");
+
 
 	}
 
 	/*
-		Retorna o tipo da Instrucao
+		Retorna nome da instrucao a parti do Op Code
+	*/
+	public String getNameByOpCode(String opCode){
+		return opName.get(opCode);
+	}
+	/*
+		Retorna nome da instrucao a parti do Func Code
+	*/
+	public String getNameByFuncCode(String funcCode){
+		return funcName.get(funcCode);
+	}
+	/*
+		Retorna o tipo da instrucao a partir do Op Code
+
+	*/
+	public InstructionType getTypeByOpCode(String opCode){
+
+		return opType.get(opCode);
+	}
+
+	/*
+		Retorna o tipo da instrucao a partir do func Code,
+		importante, pois o tipo SHIFT na verdade eh do tipo R
+	*/
+	public InstructionType getTypeByFuncCode(String funcCode){
+		return funcType.get(funcCode);
+	}
+
+	/*
+		Retorna o tipo da Instrucao a partir do seu nome
 	*/
 	public InstructionType getType(String instr){
 		return instructions.get(instr);
