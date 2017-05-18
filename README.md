@@ -9,6 +9,8 @@ ARRUMAR:
 
 - Testar se o Encoder de BRANCH n podeira dar overflow
 
+- Ver o porque o metodo hexToInt(String hex, int bits) tem bits ..?
+
 
 
 
