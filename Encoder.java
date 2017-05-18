@@ -111,6 +111,13 @@ public class Encoder{
 			}
 
 		}else{
+			throw new Exception("Erro encode LW/SW");
+		}
+		/*
+			Os outros casos abaixo funcionam, mas nao estaria correto codificar se n tem as
+			3 partes.
+		*/
+		/*else{
 			//casos 1 ou 3
 
 			if(actualParts[1].contains("$")){
@@ -129,7 +136,7 @@ public class Encoder{
 					encoded+=Calculator.intToBinString(Integer.parseInt(actualParts[1]),16);
 				}
 			}
-		}
+		}*/
 
 		return encoded;
 	}

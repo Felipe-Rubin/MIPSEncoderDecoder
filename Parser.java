@@ -41,7 +41,6 @@ public class Parser{
 				if(line.contains(".text")){
 					
 					//pula o .text
-
 					while((line = br.readLine()) != null){
 						line = beautifyInstruction(line);						
 						if(line.matches("[\\s]*")) continue; // Se n tiver nada pula
@@ -80,6 +79,34 @@ public class Parser{
 
 				}
 
+				if(line.contains(".text")){
+					
+					//pula o .text
+					while((line = br.readLine()) != null){
+						line = beautifyInstruction(line);						
+						if(line.matches("[\\s]*")) continue; // Se n tiver nada pula
+						if(line.contains(".globl")) continue; //Ignora
+						if(line.contains(".data")) break; //Acabou as instr
+						
+
+						if(line.contains(":")){
+
+							String labelSplit[] = line.split("\\s*:\\s*");//divide label de instr
+							// <Label_1,0x004...>
+							labelMemory.put(labelSplit[0],currentMemory);
+							if(labelSplit.length > 1){
+								line = labelSplit[1];
+							}else continue;
+						}
+						// <0x004..., Instr>
+						textMemory.put(currentMemory,line);
+
+						//Currmemory++;
+						currentMemory = Calculator.addIntToHex(4,currentMemory);
+						
+					}
+
+				}
 			}
 
 
@@ -141,6 +168,19 @@ public class Parser{
 			System.out.println(ks.getValue());
 
 		}
+
+		Decoder decoder = new Decoder();
+
+		try{
+
+			for(Map.Entry<String,String> ks : textMemory.entrySet()){
+				System.out.println(decoder.decode(labelMemory,ks.getKey(),ks.getValue()));
+			}
+
+		}catch(Exception e){
+			System.out.println("Error while Encoding");
+			System.out.println(e.getMessage());
+		}		
 
 	}
 

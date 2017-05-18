@@ -30,6 +30,7 @@ Ex2: andi $t5, $t2, 1
 	sw $t3, 0 ($t0)
 	or $t2, $t5, $t1
 	slt $t1, $t1, $t6
+	beq $t0, $t1, Ex1
 	sll $t5, $t1, 2
 	srl $t5, $t1, 3
 	j Ex1

@@ -56,9 +56,43 @@ public class Calculator{
 
 		}
 
+		while(n < 0){
+			for(int j = v.length -1; j >= 0; j--){
+				v[j] = prevHexChar(v[j]);
+
+				if(v[j] != 'f')break;
+			}
+			n++;
+		}
+
 		String hexSum = new String(v);
 		return "0x"+hexSum;
 	}
+
+	/*
+		Retorna o hex anterior
+	*/
+	private static char prevHexChar(char c){
+		switch(Character.toLowerCase(c)){
+			case '0': return 'f';
+			case '1': return '0';
+			case '2': return '1';
+			case '3': return '2';
+			case '4': return '3';
+			case '5': return '4';
+			case '6': return '5';
+			case '7': return '6';
+			case '8': return '7';
+			case '9': return '8';
+			case 'a': return '9';
+			case 'b': return 'a';
+			case 'c': return 'b';
+			case 'd': return 'c';
+			case 'e': return 'd';
+			case 'f': return 'e';
+			default: return c;
+		}		
+	}	
 	/*
 		Retorna o proximo hex 
 	*/
@@ -218,6 +252,22 @@ public class Calculator{
 			index = vet.length - 1;
 
 		}
+		while(n < 0){
+			for(int i = vet.length -1; i >= 0; i--){
+				if(vet[i] == '0') continue;
+				else{
+					vet[i] = '0';
+					i++;
+					while(i != vet.length){
+						vet[i] = '1';
+						i++;
+					}
+					n++;
+					break;
+				}
+			}
+		}
+
 		return vet;	
 	}	
 
@@ -288,4 +338,63 @@ public class Calculator{
 
 		return cont;
 	}
+
+
+	/*
+		Recebe um binario e transforma em decimal
+	*/
+	public static int binToInt(String bin){
+	 int cont = 0;
+
+	 char v[] = bin.toCharArray();
+	 for(int i = v.length -1; i >= 0; i--){
+	 	if(v[i] == '1') cont+= Math.pow(2,v.length - i - 1);
+	 }
+
+	 return cont;
+	}
+
+	/*
+		Recebe um binario negativo (PRE CONDICAO!)
+		Retorna o inteirno negativo representando
+	*/	
+
+	public static int binToNegativeInt(String bin){
+
+		int cont = 0;
+		
+		/*
+			Desfaz o Complemento de 2
+		*/
+		char v[] = bin.toCharArray();
+
+		v = addIntToBinArray(-1,v);
+
+		for(int i = 0; i < v.length; i++){
+			if(v[i] == '0') v[i] = '1';
+			else v[i] = '0';
+		}
+		for(int i = v.length -1; i >= 0; i--){
+	 		if(v[i] == '1') cont+= Math.pow(2,v.length - i - 1);
+	 	}
+
+		return  (- cont);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
