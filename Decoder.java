@@ -1,13 +1,15 @@
 import java.util.*;
 public class Decoder{
-	private Information information;
+	private Information information; //Objeto de informacoes
+	private int labelCont; //Contador p/ gerar as labels, e.g. Label_Val(labelCont)
 	public Decoder(){
+		labelCont = 0;
 		information = new Information();
 	}
 	/*
 		Decodifica a instrucao
 	*/
-	public String decode(Map<String,String> textMemory, String currMemory, String instruction) throws Exception{
+	public String decode(Map<String,String> labelMemory, String currMemory, String instruction) throws Exception{
 		
 		String binInstruction = Calculator.hexToBinString(instruction,32);
 
@@ -15,8 +17,8 @@ public class Decoder{
 
 
 		switch(information.getTypeByOpCode(opCode)){
-			case J: return decodeTypeJ(textMemory, binInstruction);
-			case BRANCH: return decodeTypeBRANCH(textMemory,currMemory,binInstruction);
+			case J: return decodeTypeJ(labelMemory, binInstruction);
+			case BRANCH: return decodeTypeBRANCH(labelMemory,currMemory,binInstruction);
 			case LOADSTORE: return decodeTypeLOADSTORE(binInstruction);
 			case I: return decodeTypeI(binInstruction);
 			case R: 
@@ -32,7 +34,7 @@ public class Decoder{
 	/*
 
 	*/
-	private String decodeTypeJ(Map<String,String> textMemory, String binInstruction){
+	private String decodeTypeJ(Map<String,String> labelMemory, String binInstruction){
 		//Tem q criar a label
 		String decoded = "";
 
@@ -40,9 +42,17 @@ public class Decoder{
 
 		String jumpAddr = binInstruction.substring(6);
 
-		jumpAddr = "0000"+jumpAddr+"00";
+		jumpAddr = Calculator.binToHexString("0000"+jumpAddr+"00");
 
-		decoded+= Calculator.binToHexString(jumpAddr); 
+		String labelName = "";
+		if((labelName = labelMemory.get(jumpAddr)) == null){ //Precisa criar a Label
+
+			labelName = "Label_"+labelCont;
+			labelMemory.put(jumpAddr,labelName);
+			labelCont++;
+		}
+
+		decoded+= labelName; 
 
 
 		return decoded;
@@ -51,7 +61,7 @@ public class Decoder{
 	/*
 
 	*/
-	private String decodeTypeBRANCH(Map<String,String> textMemory, String currMemory, String binInstruction) throws Exception{
+	private String decodeTypeBRANCH(Map<String,String> labelMemory, String currMemory, String binInstruction) throws Exception{
 		String decoded = "";
 
 		String opCode = binInstruction.substring(0,6);
@@ -77,9 +87,18 @@ public class Decoder{
 		}
 
 		//Endereco da label
-		String labelMemory = Calculator.addIntToHex((4 *(labelDistance +1)),currMemory);
+		String labelAddr = Calculator.addIntToHex((4 *(labelDistance +1)),currMemory);
 
-		decoded+=labelMemory;
+
+		String labelName = "";
+		if((labelName = labelMemory.get(labelAddr)) == null){ //Precisa criar a label
+
+			labelName = "Label_"+labelCont;
+			labelMemory.put(labelAddr,labelName);
+			labelCont++;
+		}
+
+		decoded+= labelName;
 
 
 		return decoded;

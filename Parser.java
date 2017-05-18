@@ -25,7 +25,7 @@ public class Parser{
 /*
 		Le o arquivo .asm
 */
-	public void parseASM(){
+	public void parseASM() throws Exception{
 		try{
 			
 			BufferedReader br = new BufferedReader(new FileReader(file));
@@ -76,8 +76,10 @@ public class Parser{
 
 						//TO DO , TALVEZ N PRECISE USAR O .data
 					}
+					//aqui a line pode ser nula 
 
 				}
+				if(line == null) break;
 
 				if(line.contains(".text")){
 					
@@ -142,6 +144,9 @@ public class Parser{
 
 	/*
 		Le o arquivo p/ decodificara as instrucoes
+
+		O label memory sera usado ao contrario aqui!
+		labelMemory<PosMemoria,Label>
 	*/
 	public void parseCode(){
 		try{
@@ -170,12 +175,29 @@ public class Parser{
 		}
 
 		Decoder decoder = new Decoder();
-
+		//Para a memoria inicial
+		labelMemory.put("0x00400000","main");
 		try{
-
+			//Antes textMemory<PosMem,HexInstr> agora textMemory<PosMem,Instr>
 			for(Map.Entry<String,String> ks : textMemory.entrySet()){
-				System.out.println(decoder.decode(labelMemory,ks.getKey(),ks.getValue()));
+				textMemory.put(ks.getKey(),decoder.decode(labelMemory,ks.getKey(),ks.getValue()));
+				//System.out.println(decoder.decode(labelMemory,ks.getKey(),ks.getValue()));
 			}
+
+			System.out.println(".text");
+			System.out.println(".globl main");
+			String label = "";
+			for(Map.Entry<String,String> ks : textMemory.entrySet()){
+				if((label = labelMemory.get(ks.getKey())) != null){
+					System.out.println(label+":");
+
+				}
+				System.out.println(ks.getValue());
+
+			}
+			System.out.println(".data");
+
+
 
 		}catch(Exception e){
 			System.out.println("Error while Encoding");
