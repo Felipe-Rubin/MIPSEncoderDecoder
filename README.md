@@ -11,6 +11,6 @@ ARRUMAR:
 
 - Ver o porque o metodo hexToInt(String hex, int bits) tem bits ..?
 
-
+- Por que n aparece JOptionPane quando da erro
 
 
