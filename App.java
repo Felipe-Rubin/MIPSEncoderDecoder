@@ -1,5 +1,14 @@
+import javax.swing.*;
 public class App {
-	public static void main(String args[]){
+	public static void main(String args[]) throws Exception{
+		
+		if(args.length == 0){
+			SwingUtilities.invokeLater(new Runnable(){
+				public void run(){
+					new MainFrame();
+				}
+			});
+		}else{
 
 		if(args.length < 2){
 			System.out.println("Usage: java -jar <JarName>  <-e or -d> <File>");
@@ -12,6 +21,8 @@ public class App {
 		//p.parseCode();
 		//Encoder e = new Encoder();
 		//e.encode("");
+		}
+
 		
 	}
 }
