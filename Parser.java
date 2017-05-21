@@ -23,17 +23,85 @@ public class Parser{
 	}
 
 	/*
+		Getter e Setters
+	*/
+	public String getFile(){
+		return file;
+	}
+	public void setFile(String file){
+		this.file = file;
+	}
+	public String getCurrentMemory(){
+		return currentMemory;
+	}
+	public void setCurrentMemory(String currentMemory){
+		this.currentMemory = currentMemory;
+	}
+	public String getCurrentMemoryData(){
+		return currentMemoryData;
+	}
+	public void setCurrentMemoryData(String currentMemoryData){
+		this.currentMemoryData = currentMemoryData;
+	}
+	public Map<String,String> getDataMemory(){
+		return dataMemory;
+	}
+	public void setDataMemory(Map<String,String> dataMemory){
+		this.dataMemory = dataMemory;
+	}
+
+	public Map<String,String> getTextMemory(){
+		return textMemory;
+	}
+	public void setTextMemory(Map<String,String> textMemory){
+		this.textMemory = textMemory;
+	}
+	public Map<String,String> getLabelMemory(){
+		return labelMemory;
+	}
+	public void setLabelMemory(Map<String,String> labelMemory){
+		this.labelMemory = labelMemory;
+	}		
+	/*
+		Cria o Reader de uma String p/ codificar
+	*/
+	public String parseASMString() throws Exception{
+		Reader r = new StringReader(file);
+		return parseASM(r);
+	}
+	/*
+		Cria o Reader de um Arquivo p/ codificar
+	*/
+	public String parseASMFile() throws Exception{
+		Reader r = new FileReader(file);
+		return parseASM(r);
+	}
+	/*
+		Cria o Reader de uma String p/ decodificar
+	*/
+	public String parseCodeString() throws Exception{
+		Reader r = new StringReader(file);
+		return parseCode(r);
+	}	
+	/*
+		Cria o Reader de um Arquivo p/ decodificar
+	*/
+	public String parseCodeFile() throws Exception{
+		Reader r = new FileReader(file);
+		return parseCode(r);
+	}
+
+	/*
 		Le o arquivo .asm, nesse caso file eh uma string
 		que contem tudo
 	*/
-	public String parseASMString() throws Exception{
+	private String parseASM(Reader r) throws Exception{
 		String resp = "";
 		String line = "";
 
 		try{
 			
-			BufferedReader br = new BufferedReader(new StringReader(file));
-
+			BufferedReader br = new BufferedReader(r);
 
 			while((line = br.readLine()) != null){
 
@@ -116,168 +184,58 @@ public class Parser{
 
 
 		}catch(Exception e){
-			throw new Exception("Error Reading "+ line);
+			throw new Exception("Error Reading line: "+ line+"\n"+e.getMessage());
 		}
 
 		Encoder encoder = new Encoder();
-
+		String encodeCurr = "";
 		try{
 			for(Map.Entry<String,String> ks : textMemory.entrySet()){
+				encodeCurr = ks.getValue();
 				resp+=encoder.encode(labelMemory,ks.getKey(),ks.getValue())+"\n";
 			}
 
 		}catch(Exception e){
-			throw new Exception("Eror while Encoding\n"+e.getMessage());
-			//System.out.println("Error while Encoding");
-			//System.out.println(e.getMessage());
+			throw new Exception("Error while Encoding instruction\n"+encodeCurr+"\n"+e.getMessage());
 		}
 
 		return resp;		
 	}
 
-/*
-		Le o arquivo .asm
-*/
-	public void parseASM() throws Exception{
-		try{
-			
-			BufferedReader br = new BufferedReader(new FileReader(file));
-
-			String line = "";
-
-			while((line = br.readLine()) != null){
-
-				if(line.matches("[\\s]*")) continue; //Se n tiver nada so pula
-
-				if(line.contains(".globl")) continue; //Ignora
-
-				if(line.contains(".text")){
-					
-					//pula o .text
-					while((line = br.readLine()) != null){
-						line = beautifyInstruction(line);						
-						if(line.matches("[\\s]*")) continue; // Se n tiver nada pula
-						if(line.contains(".globl")) continue; //Ignora
-						if(line.contains(".data")) break; //Acabou as instr
-						
-
-						if(line.contains(":")){
-
-							String labelSplit[] = line.split("\\s*:\\s*");//divide label de instr
-							// <Label_1,0x004...>
-							labelMemory.put(labelSplit[0],currentMemory);
-							if(labelSplit.length > 1){
-								line = labelSplit[1];
-							}else continue;
-						}
-						// <0x004..., Instr>
-						textMemory.put(currentMemory,line);
-
-						//Currmemory++;
-						currentMemory = Calculator.addIntToHex(4,currentMemory);
-						
-					}
-
-				}
-
-				if(line.contains(".data")){
-
-					while((line = br.readLine()) != null){
-						if(line.matches("[\\s]*")) continue;
-						if(line.contains(".globl")) continue;
-						if(line.contains(".text")) break;
-
-						//TO DO , TALVEZ N PRECISE USAR O .data
-					}
-					//aqui a line pode ser nula 
-
-				}
-				if(line == null) break;
-
-				if(line.contains(".text")){
-					
-					//pula o .text
-					while((line = br.readLine()) != null){
-						line = beautifyInstruction(line);						
-						if(line.matches("[\\s]*")) continue; // Se n tiver nada pula
-						if(line.contains(".globl")) continue; //Ignora
-						if(line.contains(".data")) break; //Acabou as instr
-						
-
-						if(line.contains(":")){
-
-							String labelSplit[] = line.split("\\s*:\\s*");//divide label de instr
-							// <Label_1,0x004...>
-							labelMemory.put(labelSplit[0],currentMemory);
-							if(labelSplit.length > 1){
-								line = labelSplit[1];
-							}else continue;
-						}
-						// <0x004..., Instr>
-						textMemory.put(currentMemory,line);
-
-						//Currmemory++;
-						currentMemory = Calculator.addIntToHex(4,currentMemory);
-						
-					}
-
-				}
-			}
-
-
-		}catch(Exception e){
-			System.out.println(e.getMessage());
-		}
-
-
-		for(Map.Entry<String,String> ks : textMemory.entrySet()){
-			System.out.print("["+ks.getKey()+ "] ");
-			System.out.println(ks.getValue());
-
-		}
-
-		for(Map.Entry<String,String> ks : labelMemory.entrySet()){
-			System.out.print("["+ks.getKey()+ "] ");
-			System.out.println(ks.getValue());
-		}
-
-		Encoder encoder = new Encoder();
-
-		try{
-
-			for(Map.Entry<String,String> ks : textMemory.entrySet()){
-				System.out.println(encoder.encode(labelMemory,ks.getKey(),ks.getValue()));
-			}
-
-		}catch(Exception e){
-			System.out.println("Error while Encoding");
-			System.out.println(e.getMessage());
-		}
-	}
 
 	/*
-		Le o arquivo .txt, nesse caso file eh uma string
-		que contem tudo
+		Le o arquivo p/ decodificara as instrucoes
+
+		O label memory sera usado ao contrario aqui!
+		labelMemory<PosMemoria,Label>
 	*/
-	public String parseCodeString() throws Exception{
+	private String parseCode(Reader r) throws Exception{
 		String resp = "";
 		String line =  "";
 		try{
-			BufferedReader br = new BufferedReader(new StringReader(file));
+			BufferedReader br = new BufferedReader(r);
 			while((line = br.readLine()) != null){
 
 				if(line.matches("[\\s]*")) continue; //Se n tiver nada so pula
 				
 				if(!line.contains("0x")){  //Para o caso de testar valores direto do mars, n sai com 0x..
+					if(line.length() != 8){
+						System.out.println(line.length()+" PORRA");
+						throw new Exception("Faile to accept Length of hex in"+line);
+					}
 					textMemory.put(currentMemory,"0x"+line);
 				}else{
+					if(line.substring(2).length() != 8){
+						System.out.println(line.substring(2).length());
+						throw new Exception("Faile to accept Length of hex in "+line);
+					}
 					textMemory.put(currentMemory,line);
 				}
 
 				currentMemory = Calculator.addIntToHex(4,currentMemory);
 			}
 		}catch(Exception e){
-			throw new Exception("Error Reading "+ line);
+			throw new Exception("Error Reading line: "+ line+"\n"+e.getMessage());
 			//System.out.println(e.getMessage());
 		}
 
@@ -286,19 +244,23 @@ public class Parser{
 		labelMemory.put("0x00400000","main");
 		resp+=".text\n\n";
 		resp+=".globl main\n";
+		String decodeCurr = "";
 		try{
 			//Antes textMemory<PosMem,HexInstr> agora textMemory<PosMem,Instr>
 			for(Map.Entry<String,String> ks : textMemory.entrySet()){
+				decodeCurr = ks.getValue();
 				textMemory.put(ks.getKey(),decoder.decode(labelMemory,ks.getKey(),ks.getValue()));
 				//System.out.println(decoder.decode(labelMemory,ks.getKey(),ks.getValue()));
 			}
 
 			String label = "";
+	
 			for(Map.Entry<String,String> ks : textMemory.entrySet()){
 				if((label = labelMemory.get(ks.getKey())) != null){
 					resp+= label +":\n";
 
 				}
+				decodeCurr = ks.getValue();
 				resp+=ks.getValue()+"\n";
 
 			}
@@ -307,78 +269,14 @@ public class Parser{
 
 
 		}catch(Exception e){
-			System.out.println("Error while Decoding\n"+e.getMessage());
+			throw new Exception ("Error while Decoding hex\n"+decodeCurr+"\n"+e.getMessage());
+			
 			//System.out.println(e.getMessage());
 		}
 
 		return resp;		
 
 	}	
-
-	/*
-		Le o arquivo p/ decodificara as instrucoes
-
-		O label memory sera usado ao contrario aqui!
-		labelMemory<PosMemoria,Label>
-	*/
-	public void parseCode(){
-		try{
-			BufferedReader br = new BufferedReader(new FileReader(file));
-			String line =  "";
-			while((line = br.readLine()) != null){
-
-				if(line.matches("[\\s]*")) continue; //Se n tiver nada so pula
-				
-				if(!line.contains("0x")){  //Para o caso de testar valores direto do mars, n sai com 0x..
-					textMemory.put(currentMemory,"0x"+line);
-				}else{
-					textMemory.put(currentMemory,line);
-				}
-
-				currentMemory = Calculator.addIntToHex(4,currentMemory);
-			}
-		}catch(Exception e){
-			System.out.println(e.getMessage());
-		}
-
-		for(Map.Entry<String,String> ks : textMemory.entrySet()){
-			System.out.print("["+ks.getKey()+ "] ");
-			System.out.println(ks.getValue());
-
-		}
-
-		Decoder decoder = new Decoder();
-		//Para a memoria inicial
-		labelMemory.put("0x00400000","main");
-		try{
-			//Antes textMemory<PosMem,HexInstr> agora textMemory<PosMem,Instr>
-			for(Map.Entry<String,String> ks : textMemory.entrySet()){
-				textMemory.put(ks.getKey(),decoder.decode(labelMemory,ks.getKey(),ks.getValue()));
-				//System.out.println(decoder.decode(labelMemory,ks.getKey(),ks.getValue()));
-			}
-
-			System.out.println(".text");
-			System.out.println(".globl main");
-			String label = "";
-			for(Map.Entry<String,String> ks : textMemory.entrySet()){
-				if((label = labelMemory.get(ks.getKey())) != null){
-					System.out.println(label+":");
-
-				}
-				System.out.println(ks.getValue());
-
-			}
-			System.out.println(".data");
-
-
-
-		}catch(Exception e){
-			System.out.println("Error while Decoding");
-			System.out.println(e.getMessage());
-		}		
-
-	}
-
 
 	/*
 		Recebe uma instrucao ma formatada(muitos tabs, espacos...)

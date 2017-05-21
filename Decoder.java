@@ -24,7 +24,7 @@ public class Decoder{
 			case R: 
 			case SHIFT: return (information.getTypeByFuncCode(binInstruction.substring(26)) == InstructionType.R ? decodeTypeR(binInstruction) : decodeTypeSHIFT(binInstruction));
 			case LUI: return decodeTypeLUI(binInstruction);
-			default: throw new Exception("Error encode("+instruction+")");
+			default: throw new Exception("Error On OPCODE ("+instruction+")");
 		}
 
 		

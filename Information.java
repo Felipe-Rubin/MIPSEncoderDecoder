@@ -8,6 +8,7 @@ public class Information{
 
 	private Map<String,String> opName; // <OPbinario,Nome>
 	private Map<String,String> funcName; //<FuncBinario,Nome>
+	
 	public Information(){
 
 		instructions = new HashMap<>();
@@ -280,13 +281,6 @@ public class Information{
 			default: throw new Exception("This register doesn't exist: "+ register);
 		}			
 	}
-
-
-	/*
-		Fazer os metodos pra decodificacao
-	*/
-
-
 
 
 }

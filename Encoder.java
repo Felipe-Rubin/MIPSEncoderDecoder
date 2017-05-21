@@ -1,5 +1,5 @@
 import java.util.*;
-//import java.math.*;
+
 public class Encoder{
 	private Information information;
 	public Encoder(){
@@ -25,16 +25,19 @@ public class Encoder{
 		}
 
 		//Pega o resto das informacoes
-
-		switch(information.getType(instructionParts[0])){
-			case J : encoded+=encodeTypeJ(labelMemory,instruction);break;
-			case BRANCH : encoded+=encodeTypeBranch(labelMemory,currMemory,instruction);break;
-			case LOADSTORE: encoded+=encodeTypeLOADSTORE(instruction);break;
-			case I: encoded+=encodeTypeI(instruction);break;
-			case R: encoded+=encodeTypeR(instruction);break;
-			case SHIFT: encoded+=encodeTypeSHIFT(instruction);break;
-			case LUI: encoded+=encodeTypeLUI(instruction);break;
-			default: throw new Exception("Error encode("+instruction+")");
+		try{
+			switch(information.getType(instructionParts[0])){
+				case J : encoded+=encodeTypeJ(labelMemory,instruction);break;
+				case BRANCH : encoded+=encodeTypeBranch(labelMemory,currMemory,instruction);break;
+				case LOADSTORE: encoded+=encodeTypeLOADSTORE(instruction);break;
+				case I: encoded+=encodeTypeI(instruction);break;
+				case R: encoded+=encodeTypeR(instruction);break;
+				case SHIFT: encoded+=encodeTypeSHIFT(instruction);break;
+				case LUI: encoded+=encodeTypeLUI(instruction);break;
+				default: throw new Exception("Error Type encode("+instruction+")");
+			}
+		}catch(Exception e){
+			throw new Exception("Could not Encode instruction\n"+instruction+"\n"+e.getMessage());
 		}
 
 		//Retorna convertendo binario pra hexa
@@ -48,6 +51,7 @@ public class Encoder{
 	private String encodeTypeJ(Map<String,String> labelMemory, String instruction){
 	
 		String instructionParts[] = instruction.split(" ");
+		
 		return (Calculator.hexToBinString(labelMemory.get(instructionParts[1]),32)).substring(4,30);
 
 	}

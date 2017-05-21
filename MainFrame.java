@@ -52,9 +52,10 @@ public class MainFrame extends JFrame {
 				hexArea.setText("");
 				Parser p = new Parser(asmArea.getText());
 				try{
-				hexArea.append(p.parseASMString());
+					hexArea.append(p.parseASMString());
 				}catch(Exception exc){
-					System.out.println("Erro! \n"+exc.getMessage());
+					JOptionPane.showMessageDialog(null,"Please verify asm\n"+exc.getMessage(),"Failed to Encode",JOptionPane.ERROR_MESSAGE);
+					System.out.println("Error! \n"+exc.getMessage());
 				}
 			}
 		});
@@ -65,11 +66,11 @@ public class MainFrame extends JFrame {
 				Parser p = new Parser(hexArea.getText());
 				try{
 				//asmArea.append(p.parseCodeString());
-				String decodedASM = p.parseCodeString();
-				asmArea.append(decodedASM);
+					String decodedASM = p.parseCodeString();
+					asmArea.append(decodedASM);
 				}catch(Exception exc){
-					JOptionPane.showMessageDialog(null,"Failed to Decode","Please verify hex codes",JOptionPane.ERROR_MESSAGE);
-					System.out.println("Erro! \n"+exc.getMessage());
+					JOptionPane.showMessageDialog(null,"Please verify hex codes\n"+exc.getMessage(),"Failed to Decode",JOptionPane.ERROR_MESSAGE);
+					System.out.println("Error! \n"+exc.getMessage());
 				}
 			}
 		});		
@@ -104,17 +105,18 @@ public class MainFrame extends JFrame {
 
         			asmArea.setText("");
         			try{
-        			String line = "";
+        				String line = "";
         			//
         			//
 
-        			BufferedReader br = new BufferedReader(new FileReader(selectedFile));
+        				BufferedReader br = new BufferedReader(new FileReader(selectedFile));
         			while((line = br.readLine()) != null){
         				asmArea.append(line+"\n");
         			}
 
         			}catch(Exception ex){
-
+						JOptionPane.showMessageDialog(null,"Please verify ASM File\n"+ex.getMessage(),"Failed to Open ASM",JOptionPane.ERROR_MESSAGE);
+						System.out.println("Error! \n"+ex.getMessage());
         			}
         		}
 
@@ -132,13 +134,15 @@ public class MainFrame extends JFrame {
         			File selectedFile = chooser.getSelectedFile();
         			hexArea.setText("");
         			try{
-        			String line = "";
-        			BufferedReader br = new BufferedReader(new FileReader(selectedFile));
+        				String line = "";
+        				BufferedReader br = new BufferedReader(new FileReader(selectedFile));
         			while((line = br.readLine()) != null){
         				hexArea.append(line+"\n");
         			}
 
         			}catch(Exception ex){
+						JOptionPane.showMessageDialog(null,"Please verify Code File\n"+ex.getMessage(),"Failed to Open Code File",JOptionPane.ERROR_MESSAGE);
+						System.out.println("Error! \n"+ex.getMessage());
         				
         			}
         		}
@@ -159,7 +163,9 @@ public class MainFrame extends JFrame {
 					fw.close();
 					}catch(Exception fwexc){
 						System.out.println("Failed writing file");
+						JOptionPane.showMessageDialog(null,"Could not save ASM File\n"+fwexc.getMessage(),"Failed to Save ASM File",JOptionPane.ERROR_MESSAGE);
 						System.out.println(fwexc.getMessage());
+
 					}
 				}
 
@@ -179,6 +185,7 @@ public class MainFrame extends JFrame {
 					fw.write(hexArea.getText());
 					fw.close();
 					}catch(Exception fwexc){
+						JOptionPane.showMessageDialog(null,"Could not save Code File\n"+fwexc.getMessage(),"Failed to Save Code File",JOptionPane.ERROR_MESSAGE);
 						System.out.println("Failed writing file");
 						System.out.println(fwexc.getMessage());
 					}
@@ -205,37 +212,5 @@ public class MainFrame extends JFrame {
 
 		setVisible(true);
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
