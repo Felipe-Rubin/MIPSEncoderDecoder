@@ -30,10 +30,11 @@ public class MainFrame extends JFrame {
 	private JFrame instructionMemoryFrame;
 	private JPanel instructionMemoryPanel;
 
+	
 	private Menu viewMenu;
 	private MenuItem viewLabel;
 	private MenuItem viewInstruction;
-
+	
 	public MainFrame(){
 		initUI();
 	}
@@ -110,9 +111,34 @@ public class MainFrame extends JFrame {
 					String decodedASM = p.parseCodeString();
 					asmArea.append(decodedASM);
 
-					//trocar depois
-					viewLabel.setEnabled(false);
-					viewInstruction.setEnabled(false);
+					Map<String,String> labelMap = p.getLabelMemory();
+					String labels[][] = new String[labelMap.size()][2];
+					int cont = 0;
+					for(Map.Entry<String,String> k : labelMap.entrySet()){
+						labels[cont][1] = k.getKey();
+						labels[cont][0] = k.getValue();
+						cont++;
+					}
+					labelMemoryPanel = new TablePanel(new FTable(labels,new String[]{"Label","Memory"}));			
+					Map<String,String> textMap = p.getTextMemory();
+					String instr[][] = new String[textMap.size()][2];
+					cont = 0;
+					for(Map.Entry<String,String> k : textMap.entrySet()){
+						instr[cont][1] = k.getKey();
+						instr[cont][0] = k.getValue();
+						cont++;
+					}					
+
+					instructionMemoryPanel = new TablePanel(new FTable(instr,new String[]{"Instruction","Memory"}));
+					viewLabel.setEnabled(true);
+					viewInstruction.setEnabled(true);					
+					//
+
+
+
+					//
+
+
 				}catch(Exception exc){
 					viewLabel.setEnabled(false);
 					viewInstruction.setEnabled(false);

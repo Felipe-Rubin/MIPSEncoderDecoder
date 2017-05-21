@@ -220,7 +220,7 @@ public class Parser{
 				
 				if(!line.contains("0x")){  //Para o caso de testar valores direto do mars, n sai com 0x..
 					if(line.length() != 8){
-						System.out.println(line.length()+" PORRA");
+						System.out.println(line.length());
 						throw new Exception("Faile to accept Length of hex in"+line);
 					}
 					textMemory.put(currentMemory,"0x"+line);
