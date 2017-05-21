@@ -254,8 +254,9 @@ public class Parser{
 			}
 
 			String label = "";
-	
+			String lastMemory = "";
 			for(Map.Entry<String,String> ks : textMemory.entrySet()){
+				lastMemory = ks.getKey();
 				if((label = labelMemory.get(ks.getKey())) != null){
 					resp+= label +":\n";
 
@@ -264,6 +265,14 @@ public class Parser{
 				resp+=ks.getValue()+"\n";
 
 			}
+			System.out.println("Last Memory "+lastMemory);
+			//no caso de saltar p/ uma label q esteja no final do asm sem nada depois
+			boolean shouldWriteLabel = false;
+			for(Map.Entry<String,String> ks : labelMemory.entrySet()){
+				if(shouldWriteLabel) resp+= ks.getValue()+":\n";
+				if(ks.getKey().equals(lastMemory)) shouldWriteLabel = true;
+			}
+			//
 			resp+=".data";
 
 
