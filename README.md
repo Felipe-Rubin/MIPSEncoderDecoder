@@ -9,6 +9,9 @@ ARRUMAR:
 
 - Jogar excecoes se a instr de decodific/codific n estiver no formato
 
+- Problema ao saltar p/ a label final
+
+- Ver se faz diferenca/precisa fazer diferenca o .globl label
 
 GUI:
 - Drag-and-Drop Arquivo ASM/HEX na GUI
