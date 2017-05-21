@@ -24,21 +24,31 @@ public class MainFrame extends JFrame {
 	private MenuItem openTXT;
 	private MenuItem saveASM;
 	private MenuItem saveTXT;
+	
+	private JFrame labelMemoryFrame;
+	private JPanel labelMemoryPanel;
+	private JFrame instructionMemoryFrame;
+	private JPanel instructionMemoryPanel;
 
-
+	private Menu viewMenu;
+	private MenuItem viewLabel;
+	private MenuItem viewInstruction;
 
 	public MainFrame(){
 		initUI();
 	}
 
 	private void initUI(){
+
 		JPanel panel = new JPanel(new BorderLayout());
 
 		setTitle("MIPSEncoderDecoder");
 
 		asmArea = new JTextArea(20,25);
+
 		//asmArea.setWrapStyleWord(true);
 		hexArea = new JTextArea(20,25);
+
 		logArea = new JTextArea(3,10);
 		scrollAsm = new JScrollPane(asmArea);
 		//scrollAsm.setBounds(10,60,780,500);
@@ -53,7 +63,38 @@ public class MainFrame extends JFrame {
 				Parser p = new Parser(asmArea.getText());
 				try{
 					hexArea.append(p.parseASMString());
+					//testando FTABLE
+					Map<String,String> labelMap = p.getLabelMemory();
+
+					String labels[][] = new String[labelMap.size()][2];
+					int cont = 0;
+					for(Map.Entry<String,String> k : labelMap.entrySet()){
+						labels[cont][0] = k.getKey();
+						labels[cont][1] = k.getValue();
+						cont++;
+					}
+
+					labelMemoryPanel = new TablePanel(new FTable(labels,new String[]{"Label","Memory"}));
+
+					//
+					Map<String,String> textMap = p.getTextMemory();
+					String instr[][] = new String[textMap.size()][2];
+					cont = 0;
+					for(Map.Entry<String,String> k : textMap.entrySet()){
+						instr[cont][0] = k.getKey();
+						instr[cont][1] = k.getValue();
+						cont++;
+					}					
+
+					instructionMemoryPanel = new TablePanel(new FTable(instr,new String[]{"Instruction","Memory"}));
+
+					//
+
+					viewLabel.setEnabled(true);
+					viewInstruction.setEnabled(true);
 				}catch(Exception exc){
+					viewLabel.setEnabled(false);
+					viewInstruction.setEnabled(false);
 					JOptionPane.showMessageDialog(null,"Please verify asm\n"+exc.getMessage(),"Failed to Encode",JOptionPane.ERROR_MESSAGE);
 					System.out.println("Error! \n"+exc.getMessage());
 				}
@@ -68,7 +109,13 @@ public class MainFrame extends JFrame {
 				//asmArea.append(p.parseCodeString());
 					String decodedASM = p.parseCodeString();
 					asmArea.append(decodedASM);
+
+					//trocar depois
+					viewLabel.setEnabled(false);
+					viewInstruction.setEnabled(false);
 				}catch(Exception exc){
+					viewLabel.setEnabled(false);
+					viewInstruction.setEnabled(false);
 					JOptionPane.showMessageDialog(null,"Please verify hex codes\n"+exc.getMessage(),"Failed to Decode",JOptionPane.ERROR_MESSAGE);
 					System.out.println("Error! \n"+exc.getMessage());
 				}
@@ -113,8 +160,11 @@ public class MainFrame extends JFrame {
         			while((line = br.readLine()) != null){
         				asmArea.append(line+"\n");
         			}
-
+        			viewLabel.setEnabled(false);
+        			viewInstruction.setEnabled(false);
         			}catch(Exception ex){
+        				viewLabel.setEnabled(false);
+        				viewInstruction.setEnabled(false);
 						JOptionPane.showMessageDialog(null,"Please verify ASM File\n"+ex.getMessage(),"Failed to Open ASM",JOptionPane.ERROR_MESSAGE);
 						System.out.println("Error! \n"+ex.getMessage());
         			}
@@ -139,8 +189,11 @@ public class MainFrame extends JFrame {
         			while((line = br.readLine()) != null){
         				hexArea.append(line+"\n");
         			}
-
+        			viewLabel.setEnabled(false);
+        			viewInstruction.setEnabled(false);
         			}catch(Exception ex){
+        				viewLabel.setEnabled(false);
+        				viewInstruction.setEnabled(false);
 						JOptionPane.showMessageDialog(null,"Please verify Code File\n"+ex.getMessage(),"Failed to Open Code File",JOptionPane.ERROR_MESSAGE);
 						System.out.println("Error! \n"+ex.getMessage());
         				
@@ -198,8 +251,44 @@ public class MainFrame extends JFrame {
 		fileMenu.add(saveTXT);
 		menuBar.add(fileMenu);
 
-		setMenuBar(menuBar);
+
+	
+		// Testando Debugging
+		labelMemoryPanel = new JPanel();
+		labelMemoryFrame = new JFrame();
+		labelMemoryFrame.setTitle("Label Memory");
+		labelMemoryFrame.setSize(200,300);
+		viewMenu = new Menu("View");
+		viewLabel = new MenuItem("Label Memory");
+		viewLabel.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				
+				labelMemoryFrame.setContentPane(labelMemoryPanel);
+				labelMemoryFrame.setVisible(true);
+				
+			}
+		});
+
+		instructionMemoryFrame = new JFrame();
+		instructionMemoryPanel = new JPanel();
+		instructionMemoryFrame.setTitle("Instruction Memory");
+		instructionMemoryFrame.setSize(200,300);
+		viewInstruction = new MenuItem("Instruction Memory");
+		viewInstruction.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				instructionMemoryFrame.setContentPane(instructionMemoryPanel);
+				instructionMemoryFrame.setVisible(true);
+			}
+		});
+
+
+		viewMenu.add(viewLabel);
+		viewMenu.add(viewInstruction);
+		viewLabel.setEnabled(false);
+		viewInstruction.setEnabled(false);
+		menuBar.add(viewMenu);
 		//
+		setMenuBar(menuBar);
 
 		setContentPane(panel);
 		pack();
