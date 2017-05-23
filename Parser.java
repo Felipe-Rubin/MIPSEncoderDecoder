@@ -137,6 +137,8 @@ public class Parser{
 					}
 
 				}
+				//Saiu do 
+				if(line == null) break;
 
 				if(line.contains(".data")){
 
@@ -145,7 +147,7 @@ public class Parser{
 						if(line.contains(".globl")) continue;
 						if(line.contains(".text")) break;
 
-						//TO DO , TALVEZ N PRECISE USAR O .data
+						//Nenhuma instrucao utiliza .data, logo soh pular
 					}
 					//aqui a line pode ser nula 
 
