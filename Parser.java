@@ -152,6 +152,7 @@ public class Parser{
 					//aqui a line pode ser nula 
 
 				}
+				
 				if(line == null) break;
 
 				if(line.contains(".text")){

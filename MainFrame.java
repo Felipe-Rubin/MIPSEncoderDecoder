@@ -8,6 +8,7 @@ import java.io.*;
 //
 import javax.print.DocFlavor.*;
 //
+
 public class MainFrame extends JFrame {
 	
 	private JTextArea asmArea;
@@ -34,13 +35,16 @@ public class MainFrame extends JFrame {
 	private Menu viewMenu;
 	private MenuItem viewLabel;
 	private MenuItem viewInstruction;
+
 	
 	public MainFrame(){
 		initUI();
 	}
 
 	private void initUI(){
+		//
 
+		//
 		JPanel panel = new JPanel(new BorderLayout());
 
 		setTitle("MIPSEncoderDecoder");
