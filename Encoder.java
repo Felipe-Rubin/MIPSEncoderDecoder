@@ -11,7 +11,7 @@ public class Encoder{
 	*/
 
 	public String encode(Map<String,String> labelMemory, String currMemory, String instruction) throws Exception{
-
+		System.out.println("INstr "+instruction);
 		String instructionParts[] = instruction.split(" ");
 
 		String encoded = "";
@@ -157,6 +157,7 @@ public class Encoder{
 		encoded+=Calculator.intToBinString(information.getRegisterValue(actualParts[1]),5);
 		encoded+=Calculator.intToBinString(information.getRegisterValue(actualParts[0]),5);
 		if(actualParts[2].contains("0x")){
+			System.out.println(instruction);
 			encoded+=Calculator.hexToBinString(actualParts[2],16);
 		}else{
 			encoded+=Calculator.intToBinString(Integer.parseInt(actualParts[2]),16);
@@ -186,6 +187,7 @@ public class Encoder{
 		String funcCode = information.getFunc(instructionParts[0]);
 
 		if(funcCode.contains("0x")){
+
 			encoded+=Calculator.hexToBinString(funcCode,6);
 		}else{
 			encoded+=Calculator.intToBinString(Integer.parseInt(funcCode),6);

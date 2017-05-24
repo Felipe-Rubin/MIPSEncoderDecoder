@@ -154,14 +154,16 @@ public class Calculator{
 		//String real[] = hex.split("0x");
 		//char vet[] = real[0].toCharArray(); //pegou o 24
 		boolean negative = false;
+		int substringAux = 2; //Se for - vai ser 3, pois -0x vs 0x
 		if(hex.contains("-")){
+			substringAux = 3;
 			negative = true;
-			System.out.println("NEGATIVOOO");
+			System.out.println("NEGATIVOOO ");
 		} 
 		//char vet[] = hex.replace("0x","").toCharArray();
 
 		//O FORMATO TEM QUE SER 0x...
-		char vet[] = hex.substring(2).toCharArray(); //melhor
+		char vet[] = hex.substring(substringAux).toCharArray(); //melhor
 		
 		String aux = ""; 
 
@@ -172,14 +174,18 @@ public class Calculator{
 		}
 
 
-		//System.out.println("aux original"+aux);
+		System.out.println("aux original : "+aux);
 		
-		if(negative) aux = complementOfTwoString(aux);
+		//if(negative) aux = complementOfTwoString(aux);
+		
 
 		int subIndex = aux.length() - bits;
 		if(subIndex < 0){
 			for(int i = 0; i < Math.abs(subIndex); i++) aux = "0"+aux;
 		}
+
+		if(negative) aux = complementOfTwoString(aux);
+
 
 		return aux.substring(aux.length() - bits);
 	}

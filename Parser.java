@@ -295,15 +295,18 @@ public class Parser{
 		Retorna ela formatada
 	*/
 	public String beautifyInstruction(String horrible){
+		System.out.println("Antes "+horrible);
 		horrible = horrible.replaceAll("[#].*","");
 		horrible = horrible.replaceAll("\\s+$","");
  		horrible = horrible.replaceAll("^[\\t\\s]*","");
 		horrible = horrible.replaceAll("\\s*,",",");
 		horrible = horrible.replaceAll(",\\s*",",");
+		horrible = horrible.replaceAll("-\\s*","-");
 		horrible = horrible.replaceAll("\\s*\\(\\s*","\\(");
 		horrible = horrible.replaceAll("\\(\\s*","\\(");
 		horrible = horrible.replaceAll("\\s*\\)","\\)");
 		horrible = horrible.replaceAll("\\s+"," ");
+		System.out.println("DPOIS "+horrible);
 		return horrible;
 	}
 }
