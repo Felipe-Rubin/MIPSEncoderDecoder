@@ -13,10 +13,10 @@ public class MainFrame extends JFrame {
 	
 	private JTextArea asmArea;
 	private JTextArea hexArea;
-	private JTextArea logArea;
+	
 	private JScrollPane scrollAsm;
 	private JScrollPane scrollHex;
-	private JScrollPane scrollLog;
+	
 	private JButton encodeButton;
 	private JButton decodeButton;
 	private MenuBar menuBar;
@@ -51,14 +51,14 @@ public class MainFrame extends JFrame {
 
 		asmArea = new JTextArea(20,25);
 
-		//asmArea.setWrapStyleWord(true);
+		
 		hexArea = new JTextArea(20,25);
 
-		logArea = new JTextArea(3,10);
+		
 		scrollAsm = new JScrollPane(asmArea);
-		//scrollAsm.setBounds(10,60,780,500);
+		
 		scrollHex = new JScrollPane(hexArea);
-		scrollLog = new JScrollPane(logArea);
+		
 		scrollAsm.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollHex.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		encodeButton = new JButton("Encode");
@@ -86,8 +86,8 @@ public class MainFrame extends JFrame {
 					String instr[][] = new String[textMap.size()][2];
 					cont = 0;
 					for(Map.Entry<String,String> k : textMap.entrySet()){
-						instr[cont][0] = k.getKey();
-						instr[cont][1] = k.getValue();
+						instr[cont][1] = k.getKey();
+						instr[cont][0] = k.getValue();
 						cont++;
 					}					
 
@@ -106,6 +106,9 @@ public class MainFrame extends JFrame {
 			}
 		});
 		decodeButton = new JButton("Decode");
+		//decodeButton.setPreferredSize(new Dimension(50,50));
+
+
 		decodeButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				asmArea.setText("");
@@ -153,9 +156,13 @@ public class MainFrame extends JFrame {
 		});		
 
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
+		//buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
+		buttonPanel.setLayout(new GridLayout(4,0,25,25));
+		buttonPanel.add(new JPanel());
 		buttonPanel.add(encodeButton);
 		buttonPanel.add(decodeButton);
+		buttonPanel.add(new JPanel());
+		//buttonPanel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 
 
 
@@ -164,7 +171,7 @@ public class MainFrame extends JFrame {
 		
 
 		panel.add(scrollHex,BorderLayout.LINE_END);
-		panel.add(scrollLog,BorderLayout.PAGE_END);
+		//panel.add(scrollLog,BorderLayout.PAGE_END);
 
 		//Menus
 		menuBar = new MenuBar();
@@ -324,6 +331,7 @@ public class MainFrame extends JFrame {
 		pack();
 		//setResizable(false);
 		setSize(800,500);
+		setMinimumSize(new Dimension(800,500));
 
 		setLocationRelativeTo(null);
 
