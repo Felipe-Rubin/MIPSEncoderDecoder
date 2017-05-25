@@ -118,54 +118,65 @@ public class Information{
 	/*
 		Retorna nome da instrucao a parti do Op Code
 	*/
-	public String getNameByOpCode(String opCode){
-		return opName.get(opCode);
+	public String getNameByOpCode(String opCode) throws Exception{
+		String name = opName.get(opCode);
+		if (name != null) return name;
+		else throw new Exception("Instruction not found for \n opcode " +opCode);
+		
 	}
 	/*
 		Retorna nome da instrucao a parti do Func Code
 	*/
-	public String getNameByFuncCode(String funcCode){
-		return funcName.get(funcCode);
+	public String getNameByFuncCode(String funcCode) throws Exception{
+		String name = funcName.get(funcCode);
+		if(name != null) return name;
+		else throw new Exception("Instruction not found for \n funcCode " +funcCode);
 	}
 	/*
 		Retorna o tipo da instrucao a partir do Op Code
 
 	*/
-	public InstructionType getTypeByOpCode(String opCode){
-
-		return opType.get(opCode);
+	public InstructionType getTypeByOpCode(String opCode) throws Exception{
+		InstructionType type = opType.get(opCode);
+		if(type != null) return type;
+		else throw new Exception("Instruction Type not found for \n opCode "+opCode);
 	}
 
 	/*
 		Retorna o tipo da instrucao a partir do func Code,
 		importante, pois o tipo SHIFT na verdade eh do tipo R
 	*/
-	public InstructionType getTypeByFuncCode(String funcCode){
-		return funcType.get(funcCode);
+	public InstructionType getTypeByFuncCode(String funcCode) throws Exception{
+		InstructionType type = funcType.get(funcCode);
+		if(type != null) return type;
+		else throw new Exception("Instruction Type not found for \n funcCode "+funcCode);
 	}
 
 	/*
 		Retorna o tipo da Instrucao a partir do seu nome
 	*/
-	public InstructionType getType(String instr){
-		return instructions.get(instr);
+	public InstructionType getType(String instr) throws Exception{
+		InstructionType type = instructions.get(instr);
+		if(type != null) return type;
+		else throw new Exception("Instruction Type not found for \n instruction "+instr);
 	}
 
 	/*
 		Retorna o OPCode da Instrucao
 	*/
-	public String getOP(String instr){
-		
-		return op.get(instr);
-
+	public String getOP(String instr) throws Exception{
+		String opc = op.get(instr);
+		if(opc != null) return opc;
+		else throw new  Exception("OPCode not found for \n instruction "+instr);
 	}
 
 	/*
 		Retorna o FuncCode da Instrucao
 	*/
-	public String getFunc(String instr){
-
-		return func.get(instr);
+	public String getFunc(String instr) throws Exception{
+		String fcd = func.get(instr);
+		if(fcd != null) return fcd;
+		else throw new Exception("FuncCode Type not found for \n instruction "+instr);
 	}
 
 	/*

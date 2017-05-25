@@ -48,9 +48,12 @@ public class Encoder{
 	/*
 		Codifica instrucoes do tipo J
 	*/
-	private String encodeTypeJ(Map<String,String> labelMemory, String instruction){
+	private String encodeTypeJ(Map<String,String> labelMemory, String instruction) throws Exception{
 	
 		String instructionParts[] = instruction.split(" ");
+
+		if(!labelMemory.containsKey(instructionParts[1])) 
+			throw new Exception("Label "+instructionParts[1]+" not found for\n instruction "+instruction);
 		
 		return (Calculator.hexToBinString(labelMemory.get(instructionParts[1]),32)).substring(4,30);
 
@@ -64,6 +67,10 @@ public class Encoder{
 		String instructionParts[] = instruction.split(" ");
 
 		String actualParts[] = instructionParts[1].split(",");
+
+		if(!labelMemory.containsKey(actualParts[2])){
+			throw new Exception("Label "+instructionParts[1]+" not found for\n instruction "+instruction);
+		}
 
 		String encoded = "";
 		//rs
@@ -90,9 +97,9 @@ public class Encoder{
 			original: op, rs ,rt, offset
 			rs sendo o dentro dos parenteses
 			3 casos Possiveis
-			1) lw/sw $t1,100
-			2) lw/sw $t0,-100($t2)
-			3) lw/sw $t0,($t2)
+			1) lw/sw $t1,100 N esta correto
+			2) lw/sw $t0,-100($t2) Esta correto
+			3) lw/sw $t0,($t2) N esta correto
 		*/
 
 		String instructionParts[] = instruction.split(" ");
@@ -101,46 +108,28 @@ public class Encoder{
 
 		String encoded = "";
 
-		//encoded+=Calculator.intToBinString(information.getRegisterValue(actualParts[0]),5);
-
 		if(actualParts.length == 3){ //Caso 2
 
 			encoded+=Calculator.intToBinString(information.getRegisterValue(actualParts[2]),5);
 			encoded+=Calculator.intToBinString(information.getRegisterValue(actualParts[0]),5);
 
 			if(actualParts[1].contains("0x")){
+				if(Calculator.hexBiggerThan(actualParts[1],"0x7FFF") ||  Calculator.hexBiggerThan("-0x8000",actualParts[1])){
+					throw new Exception("Imm out of range");
+				}
 				encoded+=Calculator.hexToBinString(actualParts[1],16);
-			}else{
-				encoded+=Calculator.intToBinString(Integer.parseInt(actualParts[1]),16);
+			}else{//decimal
+				int decimal = Integer.parseInt(actualParts[1]);
+				if(decimal > 32767 || decimal < -32768){
+					throw new Exception("Imm out of range");
+				}
+				//encoded+=Calculator.intToBinString(Integer.parseInt(actualParts[1]),16);
+				encoded+=Calculator.intToBinString(decimal,16);
 			}
 
 		}else{
-			throw new Exception("Erro encode LW/SW");
+			throw new Exception("Error encode LW/SW");
 		}
-		/*
-			Os outros casos abaixo funcionam, mas nao estaria correto codificar se n tem as
-			3 partes.
-		*/
-		/*else{
-			//casos 1 ou 3
-
-			if(actualParts[1].contains("$")){
-				//Caso  3
-
-				encoded+=Calculator.intToBinString(information.getRegisterValue(actualParts[1]),5);
-				encoded+=Calculator.intToBinString(information.getRegisterValue(actualParts[0]),5);
-				encoded+=Calculator.intToBinString(0,16);
-			}else{
-				//Caso 1
-				encoded+=Calculator.intToBinString(information.getRegisterValue("$0"),5);
-				encoded+=Calculator.intToBinString(information.getRegisterValue(actualParts[0]),5);
-				if(actualParts[1].contains("0x")){
-					encoded+=Calculator.hexToBinString(actualParts[1],16);
-				}else{
-					encoded+=Calculator.intToBinString(Integer.parseInt(actualParts[1]),16);
-				}
-			}
-		}*/
 
 		return encoded;
 	}
@@ -156,11 +145,44 @@ public class Encoder{
 
 		encoded+=Calculator.intToBinString(information.getRegisterValue(actualParts[1]),5);
 		encoded+=Calculator.intToBinString(information.getRegisterValue(actualParts[0]),5);
-		if(actualParts[2].contains("0x")){
-			System.out.println(instruction);
-			encoded+=Calculator.hexToBinString(actualParts[2],16);
-		}else{
-			encoded+=Calculator.intToBinString(Integer.parseInt(actualParts[2]),16);
+		
+		// if(actualParts[2].contains("-") && (instructionParts[0].equals("xori") || instructionParts[0].equals("andi"))){
+		// 	//n aceitam valores negativos
+		// 	throw new Exception("Imm should not be negative");
+		// }
+
+		if(instructionParts[0].equals("xori") || instructionParts[0].equals("andi")){
+			if(actualParts[2].contains("-")){
+				throw new Exception("Imm should not be negative");
+			}else{
+				if(actualParts[2].contains("0x")){
+					if(Calculator.hexBiggerThan(actualParts[2],"0xFFFF")){
+						throw new Exception("Imm out of range");
+					}
+					encoded+=Calculator.hexToBinString(actualParts[2],16);
+				}else{
+					int decimal = Integer.parseInt(actualParts[2]);
+					if(decimal > 65535){
+						throw new Exception("Imm out of range");
+					}
+					encoded+=Calculator.intToBinString(decimal,16);
+				}
+			}
+		}else{ //addiu ou sltiu
+			if(actualParts[2].contains("0x")){
+				if(Calculator.hexBiggerThan(actualParts[2],"0x7FFF") ||  Calculator.hexBiggerThan("-0x8000",actualParts[2])){
+					throw new Exception("Imm out of range");
+				}			
+				System.out.println(instruction);
+				encoded+=Calculator.hexToBinString(actualParts[2],16);
+			}else{
+				int decimal = Integer.parseInt(actualParts[2]);
+				if(decimal > 32767 || decimal < -32768){
+					throw new Exception("Imm out of range");
+				}
+				encoded+=Calculator.intToBinString(decimal,16);
+			}			
+
 		}
 
 		return encoded;
@@ -190,6 +212,7 @@ public class Encoder{
 
 			encoded+=Calculator.hexToBinString(funcCode,6);
 		}else{
+
 			encoded+=Calculator.intToBinString(Integer.parseInt(funcCode),6);
 		}
 
@@ -213,10 +236,21 @@ public class Encoder{
 		//rd
 		encoded+=Calculator.intToBinString(information.getRegisterValue(actualParts[0]),5);
 		//shamt
+		if(actualParts[2].contains("-")){
+			throw new Exception("Imm should not be negative");
+		}
+
 		if(actualParts[2].contains("0x")){
+			if(Calculator.hexBiggerThan(actualParts[2],"0x1F")){
+				throw new Exception("Imm out of range");
+			}
 			encoded+=Calculator.hexToBinString(actualParts[2],5);
 		}else{
-			encoded+=Calculator.intToBinString(Integer.parseInt(actualParts[2]),5);
+			int decimal = Integer.parseInt(actualParts[2]);
+			if(decimal > 31){
+				throw new Exception("Imm out of range");
+			}
+			encoded+=Calculator.intToBinString(decimal,5);
 		}
 		//func
 
@@ -249,11 +283,22 @@ public class Encoder{
 		encoded+=Calculator.intToBinString(information.getRegisterValue(actualParts[0]),5);
 
 		//imm
-		// PRECISA CHECAR SE EH UM NUMERO NEGATIVO ? PQ ELE N PODE CARREGAR NEGATIVOS
+		
+		if(actualParts[1].contains("-")){
+			throw new Exception("Imm should not be negative");
+		}
+
 		if(actualParts[1].contains("0x")){
+			if(Calculator.hexBiggerThan(actualParts[1],"0xFFFF")){
+				throw new Exception("Imm out of range");
+			}
 			encoded+=Calculator.hexToBinString(actualParts[1],16);
 		}else{
-			encoded+=Calculator.intToBinString(Integer.parseInt(actualParts[1]),16);
+			int decimal = Integer.parseInt(actualParts[1]);
+			if(decimal > 65535){
+				throw new Exception("Imm out of range");
+			}
+			encoded+=Calculator.intToBinString(decimal,16);
 		}
 
 		return encoded;

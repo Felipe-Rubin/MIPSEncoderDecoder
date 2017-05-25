@@ -15,16 +15,19 @@ public class Decoder{
 
 		String opCode = binInstruction.substring(0,6);
 
-
-		switch(information.getTypeByOpCode(opCode)){
-			case J: return decodeTypeJ(labelMemory, binInstruction);
-			case BRANCH: return decodeTypeBRANCH(labelMemory,currMemory,binInstruction);
-			case LOADSTORE: return decodeTypeLOADSTORE(binInstruction);
-			case I: return decodeTypeI(binInstruction);
-			case R: 
-			case SHIFT: return (information.getTypeByFuncCode(binInstruction.substring(26)) == InstructionType.R ? decodeTypeR(binInstruction) : decodeTypeSHIFT(binInstruction));
-			case LUI: return decodeTypeLUI(binInstruction);
-			default: throw new Exception("Error On OPCODE ("+instruction+")");
+		try{
+			switch(information.getTypeByOpCode(opCode)){
+				case J: return decodeTypeJ(labelMemory, binInstruction);
+				case BRANCH: return decodeTypeBRANCH(labelMemory,currMemory,binInstruction);
+				case LOADSTORE: return decodeTypeLOADSTORE(binInstruction);
+				case I: return decodeTypeI(binInstruction);
+				case R: 
+				case SHIFT: return (information.getTypeByFuncCode(binInstruction.substring(26)) == InstructionType.R ? decodeTypeR(binInstruction) : decodeTypeSHIFT(binInstruction));
+				case LUI: return decodeTypeLUI(binInstruction);
+				default: throw new Exception("Error On OPCODE ("+instruction+")");
+			}
+		}catch(Exception e){
+			throw new Exception("Could not Decode Hex\n"+instruction+"\n"+e.getMessage());
 		}
 
 		
@@ -32,7 +35,7 @@ public class Decoder{
 
 
 	/*
-
+		Decodifica a instrucao do tipo J
 	*/
 	private String decodeTypeJ(Map<String,String> labelMemory, String binInstruction){
 		//Tem q criar a label
@@ -59,7 +62,7 @@ public class Decoder{
 	}
 
 	/*
-
+		Decodifica instrucoes do tipo BRANCH
 	*/
 	private String decodeTypeBRANCH(Map<String,String> labelMemory, String currMemory, String binInstruction) throws Exception{
 		String decoded = "";
@@ -105,6 +108,7 @@ public class Decoder{
 	}
 
 	/*
+		Decodifica instrucoes Load/Store
 	*/
 	private String decodeTypeLOADSTORE(String binInstruction) throws Exception{
 		String decoded = "";
@@ -132,15 +136,17 @@ public class Decoder{
 	}
 
 	/*
-
+		Decodifica Instrucoes do Tipo-I verificando tambem
+		se o bit + significativo eh de sinal ou nao
 	*/
 	private String decodeTypeI(String binInstruction) throws Exception{
 		String decoded = "";
 
 		String opCode = binInstruction.substring(0,6);
 
-		//beq ou bne
-		decoded+=information.getNameByOpCode(opCode)+" ";
+		String instructionName = information.getNameByOpCode(opCode);
+		//Tipo I
+		decoded+=instructionName+" ";
 		//rt
 		decoded+=information.getRegisterName(Calculator.binToInt(binInstruction.substring(11,16)))+",";
 		//rs
@@ -149,10 +155,15 @@ public class Decoder{
 		//imm
 		String imm = binInstruction.substring(16,32);
 		int immVal = 0;
-		if(imm.charAt(0) == '1'){ //Negativo
-			immVal = Calculator.binToNegativeInt(imm);
-		}else{ //positivo
+		if(instructionName.equals("xori") || instructionName.equals("andi")){
+			//Nao aceita negativos
 			immVal = Calculator.binToInt(imm);
+		}else{
+			if(imm.charAt(0) == '1'){ //Negativo
+				immVal = Calculator.binToNegativeInt(imm);
+			}else{ //positivo
+				immVal = Calculator.binToInt(imm);
+			}
 		}
 
 		decoded+=immVal;
@@ -162,7 +173,7 @@ public class Decoder{
 	}
 
 	/*
-
+		Decodifica instrucoes do tipo R, (shift tem caso a parte)
 	*/
 	private String decodeTypeR(String binInstruction) throws Exception{
 		String decoded = "";
@@ -183,6 +194,7 @@ public class Decoder{
 	}
 	
 	/*
+		Decodifica instrucoes SLL ou SRL
 	*/
 	private String decodeTypeSHIFT(String binInstruction) throws Exception{
 		String decoded = "";
@@ -201,6 +213,7 @@ public class Decoder{
 	}
 
 	/*
+		Decodifica a instrucao LUI
 	*/
 	private String decodeTypeLUI(String binInstruction) throws Exception{
 		String decoded = "";

@@ -31,6 +31,7 @@ public class Calculator{
 			case 'e': return 14;
 			case 'f': return 15;
 			default: return -1;
+			//default: throw new Exception("Character "+hex+" is not a Hex character");
 		}
 
 	}
@@ -387,6 +388,30 @@ public class Calculator{
 		return  (- cont);
 	}
 
+	/*
+	 	Compara se um valor Hex eh maior que outro
+	*/
+
+	public static boolean hexBiggerThan(String h1, String h2){
+		if(h1.equals(h2)) return false;
+		if(h1.contains("-") && !h2.contains("-")) return false;
+		if(!h1.contains("-") && h2.contains("-")) return true;
+		if(h1.contains("-") && h2.contains("-")) 
+			return !hexBiggerThan(h1.substring(1),h2.substring(1));
+		
+	 	char hex1[] = h1.replaceAll("(0x0*)","").toLowerCase().toCharArray();
+	 	char hex2[] = h2.replaceAll("(0x0*)","").toLowerCase().toCharArray();
+
+	 	if(hex1.length > hex2.length) return true;
+
+	 	if(hex2.length > hex1.length) return false;
+
+	 	for(int i = 0; i < hex1.length; i++){
+	 		if(hexCharToInt(hex1[i]) > hexCharToInt(hex2[i])) return true;
+	 	}
+
+	 	return false;
+	 }
 
 
 
