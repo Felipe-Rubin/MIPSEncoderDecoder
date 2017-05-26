@@ -18,7 +18,7 @@ public class Encoder{
 	*/
 
 	public String encode(Map<String,String> labelMemory, String currMemory, String instruction) throws Exception{
-		System.out.println("INstr "+instruction);
+		//System.out.println("INstr "+instruction);
 		String instructionParts[] = instruction.split(" ");
 
 		String encoded = "";
@@ -180,7 +180,7 @@ public class Encoder{
 				if(Calculator.hexBiggerThan(actualParts[2],"0x7FFF") ||  Calculator.hexBiggerThan("-0x8000",actualParts[2])){
 					throw new Exception("Imm out of range");
 				}			
-				System.out.println(instruction);
+				//System.out.println(instruction);
 				encoded+=Calculator.hexToBinString(actualParts[2],16);
 			}else{
 				int decimal = Integer.parseInt(actualParts[2]);

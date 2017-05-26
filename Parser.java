@@ -226,13 +226,13 @@ public class Parser{
 				
 				if(!line.contains("0x")){  //Para o caso de testar valores direto do mars, n sai com 0x..
 					if(line.length() != 8){
-						System.out.println(line.length());
+						//System.out.println(line.length());
 						throw new Exception("Faile to accept Length of hex in"+line);
 					}
 					textMemory.put(currentMemory,"0x"+line);
 				}else{
 					if(line.substring(2).length() != 8){
-						System.out.println(line.substring(2).length());
+						//System.out.println(line.substring(2).length());
 						throw new Exception("Faile to accept Length of hex in "+line);
 					}
 					textMemory.put(currentMemory,line);
@@ -271,7 +271,7 @@ public class Parser{
 				resp+=ks.getValue()+"\n";
 
 			}
-			System.out.println("Last Memory "+lastMemory);
+			//System.out.println("Last Memory "+lastMemory);
 			//no caso de saltar p/ uma label q esteja no final do asm sem nada depois
 			boolean shouldWriteLabel = false;
 			for(Map.Entry<String,String> ks : labelMemory.entrySet()){
@@ -298,7 +298,7 @@ public class Parser{
 		Retorna ela formatada
 	*/
 	public String beautifyInstruction(String horrible){
-		System.out.println("Antes "+horrible);
+		//System.out.println("Antes "+horrible);
 		horrible = horrible.replaceAll("[#].*","");
 		horrible = horrible.replaceAll("\\s+$","");
  		horrible = horrible.replaceAll("^[\\t\\s]*","");
@@ -309,7 +309,7 @@ public class Parser{
 		horrible = horrible.replaceAll("\\(\\s*","\\(");
 		horrible = horrible.replaceAll("\\s*\\)","\\)");
 		horrible = horrible.replaceAll("\\s+"," ");
-		System.out.println("DPOIS "+horrible);
+		//System.out.println("DPOIS "+horrible);
 		return horrible;
 	}
 }
