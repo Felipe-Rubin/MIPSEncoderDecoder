@@ -1,4 +1,11 @@
-//package.mvc;
+/*
+	Autor: Felipe Pfeifer Rubin
+	Matricula: 151050853
+	Email: felipe.rubin@acad.pucrs.br
+
+	Deve ser utilizado juntamente com a classe FTable, responsavel
+	pela utilizacao da tabela junto aos campos de busca
+*/
 import javax.swing.JPanel;
 import java.util.Map;
 import java.util.HashMap;
@@ -24,14 +31,18 @@ public class TablePanel extends JPanel{
 	private JTable table;
 	private JTextField queryFields[];
 	private List<RowFilter<Object,Object>> sortList;
-
+	/*
+		Cria a partir dos dados
+	*/
 	public TablePanel(Object[][] rows, String columns[]){
 		table = new FTable(rows,columns);
 		table.getTableHeader().setReorderingAllowed(false);
 		sortList = new ArrayList<RowFilter<Object,Object>>();
 		initUI();
 	}
-
+	/*
+		Encapsula uma tabela ja existente
+	*/
 	public TablePanel(JTable table){
 		this.table = table;
 		table.getTableHeader().setReorderingAllowed(false);
@@ -39,6 +50,9 @@ public class TablePanel extends JPanel{
 		initUI();
 	}
 	@SuppressWarnings("unchecked")
+	/*
+		Percebe que a busca do usuario mudou
+	*/
 	public void queryChanged(int index){
 		String text = queryFields[index].getText();
 		if(sensitive[index].isSelected())
@@ -48,7 +62,9 @@ public class TablePanel extends JPanel{
 		
 		((TableRowSorter<TableModel>)table.getRowSorter()).setRowFilter(RowFilter.andFilter(sortList));
 	}
-
+	/*
+		Inicia os listeners
+	*/
 	public void initListeners(JComponent component,int index){
 		if(component instanceof JTextField){
 			((JTextField)component).getDocument().addDocumentListener(new DocumentListener(){
@@ -75,6 +91,9 @@ public class TablePanel extends JPanel{
 		}
 	}
 
+	/*
+		Faz a configuracao
+	*/
 	public void initUI(){
 		queryFields = new JTextField[table.getColumnCount()];
 		sensitive = new JCheckBox[table.getColumnCount()];
@@ -105,11 +124,6 @@ public class TablePanel extends JPanel{
 		add(scrollpane,BorderLayout.CENTER);
 
 	}
-
-
-
-
-
 
 
 }

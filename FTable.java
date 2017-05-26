@@ -1,4 +1,10 @@
-//package mvc;
+/*
+	Autor: Felipe Pfeifer Rubin
+	Matricula: 151050853
+	Email: felipe.rubin@acad.pucrs.br
+
+	Tabela utilizada na interface grafica
+*/
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.JTable;
 import javax.swing.table.*;
@@ -13,6 +19,9 @@ public class FTable extends JTable{
 	private TableRowSorter<TableModel> sorter;
 	private List<RowFilter<Object,Object>> sortList;
 
+	/*
+		Modelo interno que nao permite editar a celula
+	*/
 	private class ModdedTable extends DefaultTableModel{
 		public ModdedTable(Object[][] rows, String[] columns){
 			super(rows,columns);
@@ -24,7 +33,9 @@ public class FTable extends JTable{
 		}
 	}
 
-
+	/*
+		Recebe os dados e cria com o modelo interno
+	*/
 	public FTable(Object[][] rows, String columns[]){
 			
 
@@ -36,7 +47,9 @@ public class FTable extends JTable{
 		setFillsViewportHeight(true);
 		sortList = new ArrayList<RowFilter<Object,Object>>();
 	}
-
+	/*
+		Recebe um modelo
+	*/
 	public FTable(TableModel model){
 
 		setModel(model);
@@ -48,11 +61,15 @@ public class FTable extends JTable{
 		sortList = new ArrayList<RowFilter<Object,Object>>();		
 	}
 
-
+	/*
+		adiciona elem na lista 
+	*/
 	public void addToSortList(RowFilter<Object,Object> row){
 		sortList.add(row);
 	}
-
+	/*
+		troca a lista 
+	*/
 	public void setSortList(List<RowFilter<Object,Object>> sortList){
 		this.sortList = sortList;
 	}
@@ -64,15 +81,10 @@ public class FTable extends JTable{
 	//OBS:
 	//A posicao e a coluna devem ser a mesma
 
-
-
 	public void updateSortList(int column, String text){
 		sortList.set(column,RowFilter.regexFilter(text,column));
 
 		sorter.setRowFilter(RowFilter.andFilter(sortList));
 	}
-
-	
-
 
 }

@@ -1,3 +1,11 @@
+/*
+	Autor: Felipe Pfeifer Rubin
+	Matricula: 151050853
+	Email: felipe.rubin@acad.pucrs.br
+
+	Responsavel por armazenar as informacoes de 
+	codificacao e decodificao das instrucoes
+*/
 import java.util.*;
 public class Information{
 	private Map<String,InstructionType> instructions; //tipo das instrucoes
@@ -9,6 +17,9 @@ public class Information{
 	private Map<String,String> opName; // <OPbinario,Nome>
 	private Map<String,String> funcName; //<FuncBinario,Nome>
 	
+	/*
+		Cria todas as informacoes de codificacao e decodificacao
+	*/
 	public Information(){
 
 		instructions = new HashMap<>();
@@ -116,7 +127,7 @@ public class Information{
 	}
 
 	/*
-		Retorna nome da instrucao a parti do Op Code
+		Retorna nome da instrucao a partir do Op Code
 	*/
 	public String getNameByOpCode(String opCode) throws Exception{
 		String name = opName.get(opCode);

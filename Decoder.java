@@ -1,3 +1,10 @@
+/*
+	Autor: Felipe Pfeifer Rubin
+	Matricula: 151050853
+	Email: felipe.rubin@acad.pucrs.br
+
+	Responsavel por decodificar o hex em instrucoes assembly
+*/
 import java.util.*;
 public class Decoder{
 	private Information information; //Objeto de informacoes
@@ -7,7 +14,7 @@ public class Decoder{
 		information = new Information();
 	}
 	/*
-		Decodifica a instrucao
+		Incia a decodificacao da instrucao
 	*/
 	public String decode(Map<String,String> labelMemory, String currMemory, String instruction) throws Exception{
 		

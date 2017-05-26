@@ -1,3 +1,11 @@
+/*
+	Autor: Felipe Pfeifer Rubin
+	Matricula: 151050853
+	Email: felipe.rubin@acad.pucrs.br
+
+
+	Responsavel pela interface grafica do usuario com o programa
+*/
 import java.util.*;
 import javax.swing.*;
 import java.awt.*;
@@ -11,36 +19,41 @@ import javax.print.DocFlavor.*;
 
 public class MainFrame extends JFrame {
 	
-	private JTextArea asmArea;
-	private JTextArea hexArea;
+	private JTextArea asmArea; //area de texto do assembly .asm
+	private JTextArea hexArea; //area de texto do hex .txt
 	
-	private JScrollPane scrollAsm;
-	private JScrollPane scrollHex;
+	private JScrollPane scrollAsm; //possibilita scroll asm
+	private JScrollPane scrollHex; //possibilita scroll hex
 	
-	private JButton encodeButton;
-	private JButton decodeButton;
-	private MenuBar menuBar;
-	private Menu fileMenu;
-	private MenuItem openASM;
-	private MenuItem openTXT;
-	private MenuItem saveASM;
-	private MenuItem saveTXT;
+	private JButton encodeButton; //botao de codificacao
+	private JButton decodeButton; //botao de decodificacao
+	private MenuBar menuBar; //barra com menus
+	private Menu fileMenu; //menu File
+	private MenuItem openASM; //menu para abrir assembly .asm
+	private MenuItem openTXT; //menu para abrir hex .txt
+	private MenuItem saveASM; //menu para savar assembly .asm
+	private MenuItem saveTXT; //menu para salvar assembly .txt
 	
-	private JFrame labelMemoryFrame;
-	private JPanel labelMemoryPanel;
-	private JFrame instructionMemoryFrame;
-	private JPanel instructionMemoryPanel;
+	private JFrame labelMemoryFrame; //frame da tabela de <label,posMemoria>
+	private JPanel labelMemoryPanel; //painel da tabela de <label,posMemoria>
+	private JFrame instructionMemoryFrame; //frame da tabela de <instrucao,posMemoria>
+	private JPanel instructionMemoryPanel; //painel da tabela de <instrucao,posMemoria>
 
 	
-	private Menu viewMenu;
-	private MenuItem viewLabel;
-	private MenuItem viewInstruction;
+	private Menu viewMenu; //menu view
+	private MenuItem viewLabel; //visualiza a tabela <label,posMemoria>
+	private MenuItem viewInstruction; //visualiza a tabela <instrucao,posMemoria>
 
-	
+	/*
+		Inicia as configuracoes da interface
+	*/
 	public MainFrame(){
 		initUI();
 	}
 
+	/*
+		Cria e configura os aspectos visuais
+	*/
 	private void initUI(){
 		//
 
@@ -62,6 +75,10 @@ public class MainFrame extends JFrame {
 		scrollAsm.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollHex.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		encodeButton = new JButton("Encode");
+
+		/*
+			Inicia o processo de codificacao
+		*/
 		encodeButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				hexArea.setText("");
@@ -108,7 +125,9 @@ public class MainFrame extends JFrame {
 		decodeButton = new JButton("Decode");
 		//decodeButton.setPreferredSize(new Dimension(50,50));
 
-
+		/*
+			Inicia o processo de decodificacao
+		*/
 		decodeButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				asmArea.setText("");
@@ -177,6 +196,10 @@ public class MainFrame extends JFrame {
 		menuBar = new MenuBar();
 		fileMenu = new Menu("File");
 		openASM = new MenuItem("Open .asm");
+
+		/*
+			Abre o arquivo assembly .asm
+		*/
 		openASM.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				JFileChooser chooser = new JFileChooser();
@@ -210,6 +233,9 @@ public class MainFrame extends JFrame {
 			}
 		});
 		openTXT = new MenuItem("Open .txt");
+		/*
+			Abre o arquivo hex .txt
+		*/
 		openTXT.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				JFileChooser chooser = new JFileChooser();
@@ -241,6 +267,9 @@ public class MainFrame extends JFrame {
 		});	
 
 		saveASM = new MenuItem("Save .asm");
+		/*
+			Salva o arquivo assembly .asm
+		*/
 		saveASM.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				JFileChooser chooser = new JFileChooser();
@@ -264,6 +293,9 @@ public class MainFrame extends JFrame {
 		});
 
 		saveTXT = new MenuItem("Save .txt");
+		/*
+			Salva o arquivo hex .txt
+		*/
 		saveTXT.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				JFileChooser chooser = new JFileChooser();

@@ -1,3 +1,10 @@
+/*
+	Autor: Felipe Pfeifer Rubin
+	Matricula: 151050853
+	Email: felipe.rubin@acad.pucrs.br
+
+	Responsavel por codificar as instrucoes assembly em hex
+*/
 import java.util.*;
 
 public class Encoder{
@@ -7,7 +14,7 @@ public class Encoder{
 	}
 
 	/*
-		Codifica a instrucao
+		Inicia a codificacao da instrucao
 	*/
 
 	public String encode(Map<String,String> labelMemory, String currMemory, String instruction) throws Exception{

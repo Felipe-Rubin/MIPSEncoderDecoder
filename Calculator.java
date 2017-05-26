@@ -1,16 +1,28 @@
+/*
+	Autor: Felipe Pfeifer Rubin
+	Matricula: 151050853
+	Email: felipe.rubin@acad.pucrs.br
+
+	Calculadora, responsavel por conversoes bin,hex,decimal
+	
+*/
 public class Calculator{
 	private static Calculator calculator = null;
 
 	private Calculator(){
 
 	}
-
+	/*
+		Utilizado de modo que so exista uma instancia de tal calculadora
+	*/
 	public static Calculator getInstance(){
 		if(calculator == null) calculator = new Calculator();
 		return calculator;
 	}
 
-
+	/*
+		Converte um caracter hexadecimal em seu valor decimal
+	*/
 	private static int hexCharToInt(char hex){
 
 		switch(Character.toLowerCase(hex)){
@@ -37,7 +49,7 @@ public class Calculator{
 	}
 
 	/*
-		Soma um numero ao hex
+		Soma um numero inteiro a um hexadecimal representado por uma string
 	*/
 	public static String addIntToHex(int n, String hex){
 		char v[] = hex.substring(2).toCharArray(); //Corta o 0x
@@ -71,7 +83,7 @@ public class Calculator{
 	}
 
 	/*
-		Retorna o hex anterior
+		Recebe um caracter hexadecimal e retorna o valor anterior a este
 	*/
 	private static char prevHexChar(char c){
 		switch(Character.toLowerCase(c)){
@@ -95,7 +107,7 @@ public class Calculator{
 		}		
 	}	
 	/*
-		Retorna o proximo hex 
+		Retorna um caracter hexadecimal e retorna o proximo valor deste 
 	*/
 	private static char nextHexChar(char c){
 		switch(Character.toLowerCase(c)){
@@ -119,8 +131,10 @@ public class Calculator{
 		}
 	}
 
-	// Convert de inteiro para Hex
-	// Utilizar na hora de fazer o cod HEXA
+	/* 	
+		Converte de inteiro para seu Hex representante
+		
+	*/
 	private static char intToHexChar(int c){
 		switch(c){
 			case 0: return '0';
@@ -139,15 +153,11 @@ public class Calculator{
 			case 13: return 'd';
 			case 14: return 'e';
 			case 15: return 'f';
-			default: return '\0'; //Pode devolver isso?
+			default: return '\0';
 		}
 	}
 	/*
-	OTIMIZAR DEPOIS; sepa da pra modificar hexCharToInt p/ mandar direto a string corresp
-	
-	OBS: tava fazendo um metodo simples e acabei fazendo o de decriptografar...
-
-		Transforma um numero HEXADECIMAL em BINARIO
+		Transforma um numero hexadecimal em binario
 	*/
 
 	public static String hexToBinString(String hex, int bits){
@@ -159,7 +169,6 @@ public class Calculator{
 		if(hex.contains("-")){
 			substringAux = 3;
 			negative = true;
-			System.out.println("NEGATIVOOO ");
 		} 
 		//char vet[] = hex.replace("0x","").toCharArray();
 
@@ -174,12 +183,6 @@ public class Calculator{
 
 		}
 
-
-		System.out.println("aux original : "+aux);
-		
-		//if(negative) aux = complementOfTwoString(aux);
-		
-
 		int subIndex = aux.length() - bits;
 		if(subIndex < 0){
 			for(int i = 0; i < Math.abs(subIndex); i++) aux = "0"+aux;
@@ -192,7 +195,10 @@ public class Calculator{
 	}
 
 
-	//Igual ao numToBinArray, soh q devolve em String
+	/*
+		Recebe um numero inteiro e converte para o binario representante
+
+	*/
 	public static String intToBinString(int n, int bits){
 		String aux = new String(intToBinArray(n));
 
@@ -205,7 +211,7 @@ public class Calculator{
 			Num decimal p/ converter
 			Quantos bits vai ficar
 
-		Retorna o decimal representado naquela qt de bits
+		Retorna o decimal representado naquela quantidade de bits
 	*/
 	private static char[] intToBinArray(int n){
 		char vet[] = initString(32);
@@ -227,7 +233,7 @@ public class Calculator{
 	}	
 
 	/*
-		Inicializa a String com um numero de bits
+		Inicializa a String com um numero de bits 0
 	*/
 	private static char[] initString(int bits){
 		char resp[] = new char[bits];
@@ -236,7 +242,7 @@ public class Calculator{
 	}
 
 	/*
-		Recebe um vetor de char com 0's e 1's e soma c/ um inteiro
+		Recebe um vetor de char com 0's e 1's e soma com um inteiro
 	*/
 
 	private static char[] addIntToBinArray(int n, char vet[]){
@@ -279,7 +285,7 @@ public class Calculator{
 	}	
 
 	/*
-		Faz o complemento de 2 de numero binario
+		Faz o complemento de 2 de numero binario em um vetor de caracteres
 	*/
 	private static char[] complementOfTwo(char c[]){
 		
@@ -294,6 +300,11 @@ public class Calculator{
 
 		return c;
 	}
+
+	/*
+		Faz o complemento de 2 de um numero binario utilizando o metodo privado
+		complementOfTwo(char c[])
+	*/
 
 	public static String complementOfTwoString(String bin){
 		return new String(complementOfTwo(bin.toCharArray()));
@@ -363,7 +374,7 @@ public class Calculator{
 
 	/*
 		Recebe um binario negativo (PRE CONDICAO!)
-		Retorna o inteirno negativo representando
+		Retorna o inteiro negativo representando
 	*/	
 
 	public static int binToNegativeInt(String bin){
@@ -389,7 +400,10 @@ public class Calculator{
 	}
 
 	/*
-	 	Compara se um valor Hex eh maior que outro
+		Recebe duas strings hexadecimais
+	 	Retorna True, se primeiro > segundo
+	 	Retorna False, se primeiro <= segundo
+
 	*/
 
 	public static boolean hexBiggerThan(String h1, String h2){
@@ -412,20 +426,5 @@ public class Calculator{
 
 	 	return false;
 	 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

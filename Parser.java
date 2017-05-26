@@ -1,6 +1,9 @@
 /*
-	Fix the initial file 
+	Autor: Felipe Pfeifer Rubin
+	Matricula: 151050853
+	Email: felipe.rubin@acad.pucrs.br
 
+	Responsavel pela leitura de dados, tanto assembly quanto hexadecimais
 */
 import java.util.*;
 import java.io.*;
@@ -291,7 +294,7 @@ public class Parser{
 	}	
 
 	/*
-		Recebe uma instrucao ma formatada(muitos tabs, espacos...)
+		Recebe uma instrucao nao formatada(muitos tabs, espacos...)
 		Retorna ela formatada
 	*/
 	public String beautifyInstruction(String horrible){
