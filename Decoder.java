@@ -44,7 +44,7 @@ public class Decoder{
 	/*
 		Decodifica a instrucao do tipo J
 	*/
-	private String decodeTypeJ(Map<String,String> labelMemory, String binInstruction){
+	private String decodeTypeJ(Map<String,String> labelMemory, String binInstruction) throws Exception{
 		//Tem q criar a label
 		String decoded = "";
 

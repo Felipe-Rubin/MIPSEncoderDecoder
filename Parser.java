@@ -271,13 +271,13 @@ public class Parser{
 				resp+=ks.getValue()+"\n";
 
 			}
-			//System.out.println("Last Memory "+lastMemory);
+			System.out.println("Last Memory "+lastMemory);
 			//no caso de saltar p/ uma label q esteja no final do asm sem nada depois
-			boolean shouldWriteLabel = false;
-			for(Map.Entry<String,String> ks : labelMemory.entrySet()){
-				if(shouldWriteLabel) resp+= ks.getValue()+":\n";
-				if(ks.getKey().equals(lastMemory)) shouldWriteLabel = true;
-			}
+
+			String possibleLabelMem = Calculator.addIntToHex(4,lastMemory);
+			if(labelMemory.get(possibleLabelMem) != null)
+				resp+= labelMemory.get(possibleLabelMem)+":\n";
+
 			//
 			resp+=".data";
 

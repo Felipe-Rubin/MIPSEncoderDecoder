@@ -23,7 +23,7 @@ public class Calculator{
 	/*
 		Converte um caracter hexadecimal em seu valor decimal
 	*/
-	private static int hexCharToInt(char hex){
+	private static int hexCharToInt(char hex) throws Exception{
 
 		switch(Character.toLowerCase(hex)){
 			case '0': return 0;
@@ -42,8 +42,8 @@ public class Calculator{
 			case 'd': return 13;
 			case 'e': return 14;
 			case 'f': return 15;
-			default: return -1;
-			//default: throw new Exception("Character "+hex+" is not a Hex character");
+			//default: return -1;
+			default: throw new Exception("Character "+hex+" is not a Hex character");
 		}
 
 	}
@@ -51,7 +51,7 @@ public class Calculator{
 	/*
 		Soma um numero inteiro a um hexadecimal representado por uma string
 	*/
-	public static String addIntToHex(int n, String hex){
+	public static String addIntToHex(int n, String hex) throws Exception{
 		char v[] = hex.substring(2).toCharArray(); //Corta o 0x
 
 		int i = v.length -1;
@@ -85,7 +85,7 @@ public class Calculator{
 	/*
 		Recebe um caracter hexadecimal e retorna o valor anterior a este
 	*/
-	private static char prevHexChar(char c){
+	private static char prevHexChar(char c) throws Exception{
 		switch(Character.toLowerCase(c)){
 			case '0': return 'f';
 			case '1': return '0';
@@ -103,13 +103,14 @@ public class Calculator{
 			case 'd': return 'c';
 			case 'e': return 'd';
 			case 'f': return 'e';
-			default: return c;
+			//default: return c;
+			default: throw new Exception("Character "+c+" is not a Hex character");
 		}		
 	}	
 	/*
 		Retorna um caracter hexadecimal e retorna o proximo valor deste 
 	*/
-	private static char nextHexChar(char c){
+	private static char nextHexChar(char c) throws Exception{
 		switch(Character.toLowerCase(c)){
 			case '0': return '1';
 			case '1': return '2';
@@ -127,7 +128,8 @@ public class Calculator{
 			case 'd': return 'e';
 			case 'e': return 'f';
 			case 'f': return '0';
-			default: return c;
+			//default: return c;
+			default: throw new Exception("Character "+c+" is not a Hex character");
 		}
 	}
 
@@ -135,7 +137,7 @@ public class Calculator{
 		Converte de inteiro para seu Hex representante
 		
 	*/
-	private static char intToHexChar(int c){
+	private static char intToHexChar(int c) throws Exception{
 		switch(c){
 			case 0: return '0';
 			case 1: return '1';
@@ -153,14 +155,15 @@ public class Calculator{
 			case 13: return 'd';
 			case 14: return 'e';
 			case 15: return 'f';
-			default: return '\0';
+			//default: return '\0';
+			default: throw new Exception("Value "+c+" is out of range for a Hex character");
 		}
 	}
 	/*
 		Transforma um numero hexadecimal em binario
 	*/
 
-	public static String hexToBinString(String hex, int bits){
+	public static String hexToBinString(String hex, int bits) throws Exception{
 		//recebeu o hex 0x24
 		//String real[] = hex.split("0x");
 		//char vet[] = real[0].toCharArray(); //pegou o 24
@@ -314,7 +317,7 @@ public class Calculator{
 		Recebe um binario ex: 0101 e retorna o valor em hex
 	*/
 
-	public static String binToHexString(String bin){
+	public static String binToHexString(String bin) throws Exception{
 		String resp = "0x";
 		
 		while((bin.length() %4) != 0){
@@ -344,7 +347,7 @@ public class Calculator{
 		Pega um  numero em hexa e devolve ele
 		em int soh q em string
 	*/
-	public static int hexToInt(String hex, int bits){
+	public static int hexToInt(String hex, int bits) throws Exception{
 		String hexVet[] = hex.split("0x");
 
 		char v[] = hexVet[1].toCharArray();
@@ -406,7 +409,7 @@ public class Calculator{
 
 	*/
 
-	public static boolean hexBiggerThan(String h1, String h2){
+	public static boolean hexBiggerThan(String h1, String h2) throws Exception{
 		if(h1.equals(h2)) return false;
 		if(h1.contains("-") && !h2.contains("-")) return false;
 		if(!h1.contains("-") && h2.contains("-")) return true;
